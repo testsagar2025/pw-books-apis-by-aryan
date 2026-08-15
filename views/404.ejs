@@ -3,21 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>404 - Page Not Found | PW Books APIs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f8;
+            color: #1a202c;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 500px;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .logo h1 .highlight {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .error-icon {
+            font-size: 72px;
+            margin-bottom: 16px;
+        }
+
+        .error-code {
+            font-size: 48px;
+            font-weight: 800;
+            color: #2563eb;
+            letter-spacing: 4px;
+        }
+
+        .error-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 8px 0;
+        }
+
+        .error-message {
+            color: #6b7280;
+            font-size: 16px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .error-message code {
+            background: #e5e7eb;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 24px;
+            background: #2563eb;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+            margin-left: 10px;
+        }
+
+        .btn-outline:hover {
+            background: #eff6ff;
+        }
+
+        .footer {
+            margin-top: 32px;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            display: inline-block;
+        }
+
+        @media (max-width: 480px) {
+            .error-code { font-size: 36px; }
+            .error-title { font-size: 20px; }
+            .error-icon { font-size: 56px; }
+            .btn { display: block; margin: 8px 0; }
+            .btn-outline { margin-left: 0; }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="error-page">
-            <div class="error-code">404</div>
-            <div class="error-icon">🔍</div>
-            <h1>Page Not Found</h1>
-            <p>The page you're looking for doesn't exist.</p>
-            <p><small>URL: <%= url %></small></p>
-            <div class="error-actions">
-                <a href="/" class="btn btn-primary">🏠 Go Home</a>
-                <a href="/docs" class="btn btn-secondary">📖 View Docs</a>
-            </div>
+        <!-- Logo -->
+        <div class="logo">
+            <img src="https://images.seeklogo.com/logo-png/47/1/physics-wallah-logo-png_seeklogo-474856.png" alt="PW Logo">
+            <h1>
+                PW Books APIs
+                <span class="highlight">by Aryan</span>
+            </h1>
+        </div>
+
+        <!-- Error Content -->
+        <div class="error-icon">🔍</div>
+        <div class="error-code">404</div>
+        <div class="error-title">Page Not Found</div>
+        <div class="error-message">
+            The page you're looking for doesn't exist or has been moved.
+            <br><br>
+            <code><%= url || 'Unknown URL' %></code>
+        </div>
+
+        <div>
+            <a href="/" class="btn">🏠 Go Home</a>
+            <a href="/api/status" class="btn btn-outline">📊 Check Status</a>
+        </div>
+
+        <!-- Status -->
+        <div style="margin-top: 20px;">
+            <span class="status-badge">
+                <span class="dot"></span>
+                API Active
+            </span>
+        </div>
+
+        <div class="footer">
+            &copy; 2026 PW Books APIs by Aryan
         </div>
     </div>
 </body>

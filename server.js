@@ -45,7 +45,7 @@ async function fetchBase44Data() {
 }
 
 // ============================================
-// DASHBOARD (PW Books Powered by Aryan)
+// DASHBOARD
 // ============================================
 app.get('/', async (req, res) => {
   await fetchBase44Data();
@@ -61,17 +61,11 @@ app.get('/', async (req, res) => {
 // API ENDPOINTS
 // ============================================
 
-// Health
 app.get('/api/health', async (req, res) => {
   await fetchBase44Data();
-  res.json({
-    status: 'OK',
-    server: 'PW Books APIs by Aryan',
-    timestamp: new Date().toISOString()
-  });
+  res.json({ status: 'OK', server: 'PW Books APIs by Aryan', timestamp: new Date().toISOString() });
 });
 
-// Status
 app.get('/api/status', async (req, res) => {
   await fetchBase44Data();
   res.json({
@@ -90,7 +84,6 @@ app.get('/api/status', async (req, res) => {
   });
 });
 
-// Token
 app.get('/api/token', async (req, res) => {
   await fetchBase44Data();
   res.json({
@@ -103,7 +96,7 @@ app.get('/api/token', async (req, res) => {
 });
 
 // ============================================
-// PW BOOKS PROXY - FIXED
+// PW BOOKS PROXY
 // ============================================
 app.all('/api/pwbooks/*', async (req, res) => {
   try {
@@ -112,7 +105,6 @@ app.all('/api/pwbooks/*', async (req, res) => {
     const data = req.body;
     const query = req.query;
     
-    // Build full URL
     let fullEndpoint = endpoint;
     if (Object.keys(query).length > 0) {
       fullEndpoint += '?' + new URLSearchParams(query).toString();
@@ -215,12 +207,28 @@ app.get('/api/purchased-books', async (req, res) => {
 });
 
 // ============================================
+// 404 - Page Not Found (Catch-all)
+// ============================================
+
+app.use((req, res) => {
+    res.status(404).render('404', {
+        title: '404 - Page Not Found',
+        url: req.originalUrl
+    });
+});
+
+// ============================================
 // START SERVER
 // ============================================
 
 app.listen(PORT, async () => {
   await fetchBase44Data();
-  console.log(`🚀 PW Books APIs by Aryan running on port ${PORT}`);
-  console.log(`🔑 Token: ${apiData.token ? '✅ SET' : '❌ NOT SET'}`);
-  console.log(`⚡ Status: ${apiData.mainSwitch.is_enabled ? '🟢 ON' : '🔴 OFF'}`);
+  console.log(`\n╔═══════════════════════════════════════╗`);
+  console.log(`║   📚 PW BOOKS APIs BY ARYAN        ║`);
+  console.log(`╠═══════════════════════════════════════╣`);
+  console.log(`║   🚀 Server: http://localhost:${PORT}    ║`);
+  console.log(`║   🔑 Token: ${apiData.token ? '✅ SET' : '❌ NOT SET'}`);
+  console.log(`║   ⚡ Status: ${apiData.mainSwitch.is_enabled ? '🟢 ON' : '🔴 OFF'}`);
+  console.log(`║   📊 Records: ${apiData.records.length}`);
+  console.log(`╚═══════════════════════════════════════╝\n`);
 });
