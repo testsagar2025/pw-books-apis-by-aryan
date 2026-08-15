@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <span class="icon">📚</span>
+                <div>
+                    <h1>PW Books APIs</h1>
+                    <span class="subtitle">by Aryan</span>
+                </div>
+            </div>
+            <div class="header-status">
+                <a href="/docs" class="nav-link">📖 Docs</a>
+                <span class="badge" id="api-status-badge">
+                    <%= apiSettings.mainSwitch.is_enabled ? '🟢 ON' : '🔴 OFF' %>
+                </span>
+                <span class="badge token-badge">
+                    <%= token.set ? '🔑 Token Set' : '🔴 No Token' %>
+                </span>
+            </div>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number"><%= callCount %></div>
+                <div class="stat-label">Total API Calls</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><%= apiSettings.apiRecords.length %></div>
+                <div class="stat-label">API Records</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><%= logs.length %></div>
+                <div class="stat-label">Recent Logs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><%= Math.floor(uptime / 60) %>m</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-grid">
+            <!-- Main Switch -->
+            <div class="control-card">
+                <div class="control-header">
+                    <span class="control-icon">⚡</span>
+                    <h3>Main ON/OFF Switch</h3>
+                </div>
+                <div class="control-body">
+                    <div class="switch-container">
+                        <label class="switch">
+                            <input type="checkbox" id="mainSwitch" <%= apiSettings.mainSwitch.is_enabled ? 'checked' : '' %>>
+                            <span class="slider"></span>
+                        </label>
+                        <span id="switch-status" class="switch-label <%= apiSettings.mainSwitch.is_enabled ? 'on' : 'off' %>">
+                            <%= apiSettings.mainSwitch.is_enabled ? 'ON' : 'OFF' %>
+                        </span>
+                        <button onclick="toggleSwitch()" class="btn btn-primary">Update</button>
+                    </div>
+                    <div class="switch-info">
+                        <small>Last updated: <%= new Date(apiSettings.mainSwitch.updated_date).toLocaleString() %></small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token Management -->
+            <div class="control-card">
+                <div class="control-header">
+                    <span class="control-icon">🔑</span>
+                    <h3>Bearer Token</h3>
+                </div>
+                <div class="control-body">
+                    <div class="token-status">
+                        <strong>Active:</strong>
+                        <span class="<%= token.set ? 'status-success' : 'status-error' %>">
+                            <%= token.set ? token.name : 'No token configured' %>
+                        </span>
+                        <% if (token.set) { %>
+                            <small>(<%= token.length %> chars)</small>
+                        <% } %>
+                    </div>
+                    <div class="token-input-group">
+                        <input type="text" id="tokenInput" placeholder="Paste your Bearer token" class="token-input">
+                        <input type="text" id="tokenName" placeholder="Token name (optional)" class="token-name-input">
+                        <button onclick="setToken()" class="btn btn-success">Add Token</button>
+                    </div>
+                    <div class="token-list">
+                        <h4>Configured Tokens:</h4>
+                        <ul>
+                            <% apiSettings.apiRecords.forEach(record => { %>
+                                <li>
+                                    <span class="token-name"><%= record.name || 'Unnamed' %></span>
+                                    <span class="token-date"><%= new Date(record.created_date).toLocaleDateString() %></span>
+                                    <button onclick="deleteToken('<%= record.id %>')" class="btn btn-danger btn-sm">Delete</button>
+                                </li>
+                            <% }) %>
+                            <% if (apiSettings.apiRecords.length === 0) { %>
+                                <li class="empty">No tokens configured. Add one above.</li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs -->
+        <div class="logs-section">
+            <div class="logs-header">
+                <h3>📊 Recent API Logs</h3>
+                <div>
+                    <button onclick="refreshLogs()" class="btn btn-primary btn-sm">Refresh</button>
+                    <button onclick="clearLogs()" class="btn btn-danger btn-sm">Clear</button>
+                </div>
+            </div>
+            <div class="logs-table-wrapper">
+                <table class="logs-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>API</th>
+                            <th>Status</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logs-body">
+                        <% logs.forEach(log => { %>
+                            <tr class="log-<%= log.status %>">
+                                <td><%= log.id %></td>
+                                <td><code><%= log.apiName %></code></td>
+                                <td>
+                                    <span class="status-badge status-<%= log.status %>">
+                                        <%= log.status %>
+                                    </span>
+                                </td>
+                                <td><%= new Date(log.timestamp).toLocaleString() %></td>
+                            </tr>
+                        <% }) %>
+                        <% if (logs.length === 0) { %>
+                            <tr>
+                                <td colspan="4" class="empty">No logs yet. Start making API calls!</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>PW Books APIs by Aryan &copy; 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // Toggle Switch
+        async function toggleSwitch() {
+            const checkbox = document.getElementById('mainSwitch');
+            const status = document.getElementById('switch-status');
+            const enabled = checkbox.checked;
+            
+            try {
+                const response = await fetch('/api/switch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ enabled })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    status.textContent = data.is_enabled ? 'ON' : 'OFF';
+                    status.className = 'switch-label ' + (data.is_enabled ? 'on' : 'off');
+                    document.getElementById('api-status-badge').textContent = data.is_enabled ? '🟢 ON' : '🔴 OFF';
+                    showToast('Switch updated to ' + (data.is_enabled ? 'ON' : 'OFF'), 'success');
+                }
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        // Set Token
+        async function setToken() {
+            const tokenInput = document.getElementById('tokenInput');
+            const nameInput = document.getElementById('tokenName');
+            const token = tokenInput.value.trim();
+            const name = nameInput.value.trim() || 'Default Token';
+            
+            if (!token) {
+                showToast('Please enter a token', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, name })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    showToast('Token added successfully!', 'success');
+                    tokenInput.value = '';
+                    nameInput.value = '';
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('Error: ' + data.error, 'error');
+                }
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        // Delete Token
+        async function deleteToken(id) {
+            if (!confirm('Delete this token?')) return;
+            try {
+                const response = await fetch(`/api/token/${id}`, { method: 'DELETE' });
+                const data = await response.json();
+                if (data.success) {
+                    showToast('Token deleted', 'success');
+                    setTimeout(() => location.reload(), 1000);
+                }
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        // Refresh Logs
+        async function refreshLogs() {
+            try {
+                const response = await fetch('/api/logs?limit=30');
+                const data = await response.json();
+                const tbody = document.getElementById('logs-body');
+                if (data.logs.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="empty">No logs yet.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = data.logs.map(log => `
+                    <tr class="log-${log.status}">
+                        <td>${log.id}</td>
+                        <td><code>${log.apiName}</code></td>
+                        <td><span class="status-badge status-${log.status}">${log.status}</span></td>
+                        <td>${new Date(log.timestamp).toLocaleString()}</td>
+                    </tr>
+                `).join('');
+                showToast('Logs refreshed', 'info');
+            } catch (error) {
+                showToast('Error refreshing logs', 'error');
+            }
+        }
+
+        // Clear Logs
+        async function clearLogs() {
+            if (!confirm('Clear all logs?')) return;
+            try {
+                await fetch('/api/logs', { method: 'DELETE' });
+                showToast('Logs cleared', 'success');
+                setTimeout(() => location.reload(), 500);
+            } catch (error) {
+                showToast('Error: ' + error.message, 'error');
+            }
+        }
+
+        // Toast
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+    </script>
+</body>
+</html>

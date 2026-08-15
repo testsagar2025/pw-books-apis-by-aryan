@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="icon">📖</span>
+                <div>
+                    <h1>API Documentation</h1>
+                    <span class="subtitle">PW Books APIs by Aryan</span>
+                </div>
+            </div>
+            <div class="header-status">
+                <a href="/" class="nav-link">🏠 Dashboard</a>
+                <span class="badge"><%= apiSettings.mainSwitch.is_enabled ? '🟢 ON' : '🔴 OFF' %></span>
+            </div>
+        </header>
+
+        <div class="docs-content">
+            <div class="docs-section">
+                <h2>🚀 Quick Start</h2>
+                <div class="code-block">
+                    <pre><span class="comment">// Base URL</span>
+const BASE_URL = 'https://YOUR-APP.onrender.com';
+
+<span class="comment">// Set your token</span>
+await fetch(`${BASE_URL}/api/token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: 'YOUR_TOKEN', name: 'My Token' })
+});
+
+<span class="comment">// Get purchased books</span>
+const response = await fetch(
+    `${BASE_URL}/api/purchased-books?userId=YOUR_USER_ID`
+);
+const data = await response.json();</pre>
+                </div>
+            </div>
+
+            <div class="docs-section">
+                <h2>📋 Endpoints</h2>
+                
+                <div class="endpoint-doc">
+                    <h3><span class="method get">GET</span> /api/health</h3>
+                    <p>Server health check</p>
+                </div>
+
+                <div class="endpoint-doc">
+                    <h3><span class="method get">GET</span> /api/status</h3>
+                    <p>Full server status with stats</p>
+                </div>
+
+                <div class="endpoint-doc">
+                    <h3><span class="method get">GET</span> /api/switch</h3>
+                    <p>Get main ON/OFF switch status</p>
+                </div>
+
+                <div class="endpoint-doc">
+                    <h3><span class="method post">POST</span> /api/switch</h3>
+                    <p>Update main switch</p>
+                    <div class="code-block">
+                        <pre>{ "enabled": true }</pre>
+                    </div>
+                </div>
+
+                <div class="endpoint-doc">
+                    <h3><span class="method get">GET</span> /api/token</h3>
+                    <p>Get token status and configured tokens</p>
+                </div>
+
+                <div class="endpoint-doc">
+                    <h3><span class="method post">POST</span> /api/token</h3>
+                    <p>Add a new Bearer token</p>
+                    <div class="code-block">
+                        <pre>{ "token": "YOUR_TOKEN", "name": "My Token" }</pre>
+                    </div>
+                </div>
+
+                <div class="endpoint-doc">
+                    <h3><span class="method get">GET</span> /api/logs</h3>
+                    <p>View API call logs</p>
+                    <p><small>Query params: ?limit=50&status=success|error</small></p>
+                </div>
+
+                <div class="endpoint-doc">
+                    <h3><span class="method get">GET</span> /api/purchased-books</h3>
+                    <p>Get purchased books for a user</p>
+                    <p><small>Query: ?userId=YOUR_ID&paymentStatus=SUCCESS</small></p>
+                </div>
+
+                <div class="endpoint-doc">
+                    <h3><span class="method get">GET</span> /api/book/:bookId</h3>
+                    <p>Get book details by ID</p>
+                </div>
+
+                <div class="endpoint-doc">
+                    <h3><span class="method get">GET</span> /api/book/:bookId/chapters</h3>
+                    <p>Get all chapters for a book</p>
+                </div>
+
+                <div class="endpoint-doc">
+                    <h3><span class="method all">ALL</span> /api/pwbooks/*</h3>
+                    <p>Proxy any PW Books API request</p>
+                </div>
+            </div>
+
+            <div class="docs-section">
+                <h2>⚠️ Error Responses</h2>
+                <div class="code-block">
+                    <pre>{
+    "success": false,
+    "error": "Error message here",
+    "code": "UNAUTHORIZED | SERVER_ERROR"
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>PW Books APIs by Aryan &copy; 2026</p>
+        </footer>
+    </div>
+</body>
+</html>
