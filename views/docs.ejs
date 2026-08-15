@@ -4,128 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
-    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f8;
+            color: #1a202c;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container { text-align: center; padding: 40px 20px; max-width: 500px; }
+        .logo { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 32px; }
+        .logo img { height: 48px; }
+        .logo h1 { font-size: 20px; font-weight: 700; color: #1f2937; }
+        .logo .highlight { background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card { background: #ffffff; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; }
+        .card .icon { font-size: 48px; margin-bottom: 16px; }
+        .card h2 { font-size: 22px; margin-bottom: 8px; }
+        .card p { color: #6b7280; font-size: 16px; margin-bottom: 20px; line-height: 1.6; }
+        .btn { display: inline-block; padding: 10px 24px; background: #2563eb; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background 0.2s; }
+        .btn:hover { background: #1d4ed8; }
+        .btn-outline { background: transparent; color: #2563eb; border: 2px solid #2563eb; margin-left: 10px; }
+        .btn-outline:hover { background: #eff6ff; }
+        .footer { margin-top: 24px; color: #9ca3af; font-size: 13px; }
+        @media (max-width: 480px) { .btn { display: block; margin: 8px 0; } .btn-outline { margin-left: 0; } }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="logo">
-                <span class="icon">📖</span>
-                <div>
-                    <h1>API Documentation</h1>
-                    <span class="subtitle">PW Books APIs by Aryan</span>
-                </div>
-            </div>
-            <div class="header-status">
-                <a href="/" class="nav-link">🏠 Dashboard</a>
-                <span class="badge"><%= apiSettings.mainSwitch.is_enabled ? '🟢 ON' : '🔴 OFF' %></span>
-            </div>
-        </header>
+        <div class="logo">
+            <img src="https://images.seeklogo.com/logo-png/47/1/physics-wallah-logo-png_seeklogo-474856.png" alt="PW Logo">
+            <h1>
+                PW Books APIs
+                <span class="highlight">by Aryan</span>
+            </h1>
+        </div>
 
-        <div class="docs-content">
-            <div class="docs-section">
-                <h2>🚀 Quick Start</h2>
-                <div class="code-block">
-                    <pre><span class="comment">// Base URL</span>
-const BASE_URL = 'https://YOUR-APP.onrender.com';
-
-<span class="comment">// Set your token</span>
-await fetch(`${BASE_URL}/api/token`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ token: 'YOUR_TOKEN', name: 'My Token' })
-});
-
-<span class="comment">// Get purchased books</span>
-const response = await fetch(
-    `${BASE_URL}/api/purchased-books?userId=YOUR_USER_ID`
-);
-const data = await response.json();</pre>
-                </div>
-            </div>
-
-            <div class="docs-section">
-                <h2>📋 Endpoints</h2>
-                
-                <div class="endpoint-doc">
-                    <h3><span class="method get">GET</span> /api/health</h3>
-                    <p>Server health check</p>
-                </div>
-
-                <div class="endpoint-doc">
-                    <h3><span class="method get">GET</span> /api/status</h3>
-                    <p>Full server status with stats</p>
-                </div>
-
-                <div class="endpoint-doc">
-                    <h3><span class="method get">GET</span> /api/switch</h3>
-                    <p>Get main ON/OFF switch status</p>
-                </div>
-
-                <div class="endpoint-doc">
-                    <h3><span class="method post">POST</span> /api/switch</h3>
-                    <p>Update main switch</p>
-                    <div class="code-block">
-                        <pre>{ "enabled": true }</pre>
-                    </div>
-                </div>
-
-                <div class="endpoint-doc">
-                    <h3><span class="method get">GET</span> /api/token</h3>
-                    <p>Get token status and configured tokens</p>
-                </div>
-
-                <div class="endpoint-doc">
-                    <h3><span class="method post">POST</span> /api/token</h3>
-                    <p>Add a new Bearer token</p>
-                    <div class="code-block">
-                        <pre>{ "token": "YOUR_TOKEN", "name": "My Token" }</pre>
-                    </div>
-                </div>
-
-                <div class="endpoint-doc">
-                    <h3><span class="method get">GET</span> /api/logs</h3>
-                    <p>View API call logs</p>
-                    <p><small>Query params: ?limit=50&status=success|error</small></p>
-                </div>
-
-                <div class="endpoint-doc">
-                    <h3><span class="method get">GET</span> /api/purchased-books</h3>
-                    <p>Get purchased books for a user</p>
-                    <p><small>Query: ?userId=YOUR_ID&paymentStatus=SUCCESS</small></p>
-                </div>
-
-                <div class="endpoint-doc">
-                    <h3><span class="method get">GET</span> /api/book/:bookId</h3>
-                    <p>Get book details by ID</p>
-                </div>
-
-                <div class="endpoint-doc">
-                    <h3><span class="method get">GET</span> /api/book/:bookId/chapters</h3>
-                    <p>Get all chapters for a book</p>
-                </div>
-
-                <div class="endpoint-doc">
-                    <h3><span class="method all">ALL</span> /api/pwbooks/*</h3>
-                    <p>Proxy any PW Books API request</p>
-                </div>
-            </div>
-
-            <div class="docs-section">
-                <h2>⚠️ Error Responses</h2>
-                <div class="code-block">
-                    <pre>{
-    "success": false,
-    "error": "Error message here",
-    "code": "UNAUTHORIZED | SERVER_ERROR"
-}</pre>
-                </div>
+        <div class="card">
+            <div class="icon">⛔</div>
+            <h2>API is Currently Inactive</h2>
+            <p>
+                The PW Books API is currently turned off. Please enable the main switch 
+                to access the documentation and API endpoints.
+            </p>
+            <div>
+                <a href="/" class="btn">🏠 Go Home</a>
+                <a href="/api/status" class="btn btn-outline">📊 Check Status</a>
             </div>
         </div>
 
-        <footer>
-            <p>PW Books APIs by Aryan &copy; 2026</p>
-        </footer>
+        <div class="footer">&copy; 2026 PW Books APIs by Aryan</div>
     </div>
 </body>
 </html>

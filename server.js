@@ -218,6 +218,67 @@ app.use((req, res) => {
 });
 
 // ============================================
+// DOCS PAGE (Password Protected)
+// ============================================
+
+// Docs route with password check
+app.get('/docs', async (req, res) => {
+  await fetchBase44Data();
+  
+  // Check if API is active
+  if (!apiData.mainSwitch.is_enabled) {
+    return res.status(503).render('inactive', {
+      title: 'API Inactive - PW Books APIs by Aryan',
+      api: apiData
+    });
+  }
+  
+  res.render('docs', {
+    title: 'API Documentation - PW Books APIs by Aryan',
+    api: apiData,
+    tokenSet: !!apiData.token,
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Docs password verification
+app.post('/docs/verify', async (req, res) => {
+  const { password } = req.body;
+  const DOCS_PASSWORD = '123@123';
+  
+  if (password === DOCS_PASSWORD) {
+    req.session = req.session || {};
+    req.session.docsAuthorized = true;
+    return res.redirect('/docs');
+  }
+  
+  res.render('docs-auth', {
+    title: 'Access Denied - PW Books APIs by Aryan',
+    error: 'Invalid password. Please try again.',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Docs authorization check middleware
+app.use('/docs', (req, res, next) => {
+  if (req.path === '/docs' && !req.session?.docsAuthorized) {
+    return res.render('docs-auth', {
+      title: 'Access Required - PW Books APIs by Aryan',
+      error: null,
+      timestamp: new Date().toISOString()
+    });
+  }
+  next();
+});
+
+// Docs logout
+app.get('/docs/logout', (req, res) => {
+  if (req.session) {
+    req.session.docsAuthorized = false;
+  }
+  res.redirect('/docs');
+});
+// ============================================
 // START SERVER
 // ============================================
 
