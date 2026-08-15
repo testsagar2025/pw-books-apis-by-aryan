@@ -4,12 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0e1a; color: #e0e0e0; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #1a1f35; margin-bottom: 30px; flex-wrap: wrap; gap: 12px; }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo .icon { font-size: 32px; }
+        .logo h1 { font-size: 24px; background: linear-gradient(135deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo .subtitle { font-size: 13px; color: #6b7280; }
+        .badge { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; background: #1a1f35; color: #94a3b8; }
+        .badge.on { background: rgba(74, 222, 128, 0.1); color: #4ade80; }
+        .badge.off { background: rgba(248, 113, 113, 0.1); color: #f87171; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 30px; }
+        .stat-card { background: #111827; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #1a1f35; }
+        .stat-number { font-size: 28px; font-weight: 700; color: #60a5fa; }
+        .stat-label { font-size: 13px; color: #6b7280; margin-top: 4px; }
+        .status-ok { color: #4ade80; }
+        .status-error { color: #f87171; }
+        .info-text { color: #6b7280; font-size: 14px; margin-top: 8px; }
+        footer { text-align: center; padding: 20px 0; color: #6b7280; font-size: 14px; border-top: 1px solid #1a1f35; margin-top: 30px; }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <header>
             <div class="logo">
                 <span class="icon">📚</span>
@@ -18,266 +36,51 @@
                     <span class="subtitle">by Aryan</span>
                 </div>
             </div>
-            <div class="header-status">
-                <a href="/docs" class="nav-link">📖 Docs</a>
-                <span class="badge" id="api-status-badge">
+            <div>
+                <span class="badge <%= apiSettings.mainSwitch.is_enabled ? 'on' : 'off' %>">
                     <%= apiSettings.mainSwitch.is_enabled ? '🟢 ON' : '🔴 OFF' %>
                 </span>
-                <span class="badge token-badge">
+                <span class="badge <%= token.set ? 'on' : 'off' %>">
                     <%= token.set ? '🔑 Token Set' : '🔴 No Token' %>
                 </span>
             </div>
         </header>
 
-        <!-- Stats -->
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number"><%= callCount %></div>
-                <div class="stat-label">Total API Calls</div>
-            </div>
             <div class="stat-card">
                 <div class="stat-number"><%= apiSettings.apiRecords.length %></div>
                 <div class="stat-label">API Records</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number"><%= logs.length %></div>
-                <div class="stat-label">Recent Logs</div>
+                <div class="stat-number"><%= token.set ? '✅' : '❌' %></div>
+                <div class="stat-label">Token Status</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number"><%= Math.floor(uptime / 60) %>m</div>
-                <div class="stat-label">Uptime</div>
+                <div class="stat-number"><%= apiSettings.mainSwitch.is_enabled ? 'ON' : 'OFF' %></div>
+                <div class="stat-label">Main Switch</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number"><%= new Date().toLocaleTimeString() %></div>
+                <div class="stat-label">Server Time</div>
             </div>
         </div>
 
-        <!-- Controls -->
-        <div class="controls-grid">
-            <!-- Main Switch -->
-            <div class="control-card">
-                <div class="control-header">
-                    <span class="control-icon">⚡</span>
-                    <h3>Main ON/OFF Switch</h3>
-                </div>
-                <div class="control-body">
-                    <div class="switch-container">
-                        <label class="switch">
-                            <input type="checkbox" id="mainSwitch" <%= apiSettings.mainSwitch.is_enabled ? 'checked' : '' %>>
-                            <span class="slider"></span>
-                        </label>
-                        <span id="switch-status" class="switch-label <%= apiSettings.mainSwitch.is_enabled ? 'on' : 'off' %>">
-                            <%= apiSettings.mainSwitch.is_enabled ? 'ON' : 'OFF' %>
-                        </span>
-                        <button onclick="toggleSwitch()" class="btn btn-primary">Update</button>
-                    </div>
-                    <div class="switch-info">
-                        <small>Last updated: <%= new Date(apiSettings.mainSwitch.updated_date).toLocaleString() %></small>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Token Management -->
-            <div class="control-card">
-                <div class="control-header">
-                    <span class="control-icon">🔑</span>
-                    <h3>Bearer Token</h3>
-                </div>
-                <div class="control-body">
-                    <div class="token-status">
-                        <strong>Active:</strong>
-                        <span class="<%= token.set ? 'status-success' : 'status-error' %>">
-                            <%= token.set ? token.name : 'No token configured' %>
-                        </span>
-                        <% if (token.set) { %>
-                            <small>(<%= token.length %> chars)</small>
-                        <% } %>
-                    </div>
-                    <div class="token-input-group">
-                        <input type="text" id="tokenInput" placeholder="Paste your Bearer token" class="token-input">
-                        <input type="text" id="tokenName" placeholder="Token name (optional)" class="token-name-input">
-                        <button onclick="setToken()" class="btn btn-success">Add Token</button>
-                    </div>
-                    <div class="token-list">
-                        <h4>Configured Tokens:</h4>
-                        <ul>
-                            <% apiSettings.apiRecords.forEach(record => { %>
-                                <li>
-                                    <span class="token-name"><%= record.name || 'Unnamed' %></span>
-                                    <span class="token-date"><%= new Date(record.created_date).toLocaleDateString() %></span>
-                                    <button onclick="deleteToken('<%= record.id %>')" class="btn btn-danger btn-sm">Delete</button>
-                                </li>
-                            <% }) %>
-                            <% if (apiSettings.apiRecords.length === 0) { %>
-                                <li class="empty">No tokens configured. Add one above.</li>
-                            <% } %>
-                        </ul>
-                    </div>
-                </div>
+        <div style="background: #111827; padding: 20px; border-radius: 12px; border: 1px solid #1a1f35; margin-top: 20px;">
+            <h3 style="color: #94a3b8; margin-bottom: 16px;">📋 API Status</h3>
+            <p><strong>Server:</strong> PW Books APIs by Aryan</p>
+            <p><strong>Status:</strong> <span class="status-ok">● Operational</span></p>
+            <p><strong>Base44:</strong> <span class="status-ok">● Connected</span></p>
+            <p><strong>Token:</strong> <%= token.set ? '<span class="status-ok">● Set</span>' : '<span class="status-error">● Not Set</span>' %></p>
+            <p><strong>Records:</strong> <%= apiSettings.apiRecords.length %> tokens configured</p>
+            <div class="info-text">
+                <p>📖 <a href="/docs" style="color: #60a5fa;">View API Documentation</a></p>
+                <p>🔗 Base URL: <code style="background: #0a0e1a; padding: 2px 8px; border-radius: 4px;">https://your-app.onrender.com</code></p>
             </div>
         </div>
 
-        <!-- Logs -->
-        <div class="logs-section">
-            <div class="logs-header">
-                <h3>📊 Recent API Logs</h3>
-                <div>
-                    <button onclick="refreshLogs()" class="btn btn-primary btn-sm">Refresh</button>
-                    <button onclick="clearLogs()" class="btn btn-danger btn-sm">Clear</button>
-                </div>
-            </div>
-            <div class="logs-table-wrapper">
-                <table class="logs-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>API</th>
-                            <th>Status</th>
-                            <th>Timestamp</th>
-                        </tr>
-                    </thead>
-                    <tbody id="logs-body">
-                        <% logs.forEach(log => { %>
-                            <tr class="log-<%= log.status %>">
-                                <td><%= log.id %></td>
-                                <td><code><%= log.apiName %></code></td>
-                                <td>
-                                    <span class="status-badge status-<%= log.status %>">
-                                        <%= log.status %>
-                                    </span>
-                                </td>
-                                <td><%= new Date(log.timestamp).toLocaleString() %></td>
-                            </tr>
-                        <% }) %>
-                        <% if (logs.length === 0) { %>
-                            <tr>
-                                <td colspan="4" class="empty">No logs yet. Start making API calls!</td>
-                            </tr>
-                        <% } %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Footer -->
         <footer>
             <p>PW Books APIs by Aryan &copy; 2026</p>
         </footer>
     </div>
-
-    <script>
-        // Toggle Switch
-        async function toggleSwitch() {
-            const checkbox = document.getElementById('mainSwitch');
-            const status = document.getElementById('switch-status');
-            const enabled = checkbox.checked;
-            
-            try {
-                const response = await fetch('/api/switch', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ enabled })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    status.textContent = data.is_enabled ? 'ON' : 'OFF';
-                    status.className = 'switch-label ' + (data.is_enabled ? 'on' : 'off');
-                    document.getElementById('api-status-badge').textContent = data.is_enabled ? '🟢 ON' : '🔴 OFF';
-                    showToast('Switch updated to ' + (data.is_enabled ? 'ON' : 'OFF'), 'success');
-                }
-            } catch (error) {
-                showToast('Error: ' + error.message, 'error');
-            }
-        }
-
-        // Set Token
-        async function setToken() {
-            const tokenInput = document.getElementById('tokenInput');
-            const nameInput = document.getElementById('tokenName');
-            const token = tokenInput.value.trim();
-            const name = nameInput.value.trim() || 'Default Token';
-            
-            if (!token) {
-                showToast('Please enter a token', 'error');
-                return;
-            }
-            
-            try {
-                const response = await fetch('/api/token', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token, name })
-                });
-                const data = await response.json();
-                if (data.success) {
-                    showToast('Token added successfully!', 'success');
-                    tokenInput.value = '';
-                    nameInput.value = '';
-                    setTimeout(() => location.reload(), 1000);
-                } else {
-                    showToast('Error: ' + data.error, 'error');
-                }
-            } catch (error) {
-                showToast('Error: ' + error.message, 'error');
-            }
-        }
-
-        // Delete Token
-        async function deleteToken(id) {
-            if (!confirm('Delete this token?')) return;
-            try {
-                const response = await fetch(`/api/token/${id}`, { method: 'DELETE' });
-                const data = await response.json();
-                if (data.success) {
-                    showToast('Token deleted', 'success');
-                    setTimeout(() => location.reload(), 1000);
-                }
-            } catch (error) {
-                showToast('Error: ' + error.message, 'error');
-            }
-        }
-
-        // Refresh Logs
-        async function refreshLogs() {
-            try {
-                const response = await fetch('/api/logs?limit=30');
-                const data = await response.json();
-                const tbody = document.getElementById('logs-body');
-                if (data.logs.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" class="empty">No logs yet.</td></tr>';
-                    return;
-                }
-                tbody.innerHTML = data.logs.map(log => `
-                    <tr class="log-${log.status}">
-                        <td>${log.id}</td>
-                        <td><code>${log.apiName}</code></td>
-                        <td><span class="status-badge status-${log.status}">${log.status}</span></td>
-                        <td>${new Date(log.timestamp).toLocaleString()}</td>
-                    </tr>
-                `).join('');
-                showToast('Logs refreshed', 'info');
-            } catch (error) {
-                showToast('Error refreshing logs', 'error');
-            }
-        }
-
-        // Clear Logs
-        async function clearLogs() {
-            if (!confirm('Clear all logs?')) return;
-            try {
-                await fetch('/api/logs', { method: 'DELETE' });
-                showToast('Logs cleared', 'success');
-                setTimeout(() => location.reload(), 500);
-            } catch (error) {
-                showToast('Error: ' + error.message, 'error');
-            }
-        }
-
-        // Toast
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-    </script>
 </body>
 </html>
