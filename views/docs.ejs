@@ -12,7 +12,7 @@
             color: #1a202c;
             min-height: 100vh;
         }
-        .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
         
         /* Header */
         header {
@@ -31,13 +31,29 @@
         .logo img { height: 36px; }
         .logo h1 { font-size: 18px; font-weight: 700; color: #1f2937; }
         .logo .highlight { background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav-links { display: flex; gap: 12px; align-items: center; }
+        .nav-links { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
         .nav-link { color: #2563eb; text-decoration: none; font-weight: 500; padding: 6px 12px; border-radius: 6px; transition: background 0.2s; }
         .nav-link:hover { background: #eff6ff; }
         .badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; background: #d1fae5; color: #065f46; display: inline-flex; align-items: center; gap: 4px; }
         .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block; }
         .badge.off { background: #fee2e2; color: #991b1b; }
         .badge.off .dot { background: #ef4444; }
+        
+        /* Copy Button */
+        .copy-btn {
+            background: #f3f4f6;
+            border: none;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #6b7280;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.2s;
+            font-family: monospace;
+        }
+        .copy-btn:hover { background: #e5e7eb; }
+        .copy-btn.copied { background: #d1fae5; color: #065f46; }
         
         /* Docs Content */
         .docs-content { background: #ffffff; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; }
@@ -53,26 +69,54 @@
         .method.put { background: #fef3c7; color: #92400e; }
         .method.delete { background: #fee2e2; color: #991b1b; }
         .method.all { background: #ede9fe; color: #5b21b6; }
-        .endpoint .path { font-family: monospace; font-size: 14px; color: #1f2937; }
+        .endpoint .path { font-family: monospace; font-size: 14px; color: #1f2937; word-break: break-all; }
         .endpoint .desc { color: #6b7280; font-size: 14px; margin-top: 4px; }
+        .endpoint .params { margin-top: 8px; font-size: 14px; }
+        .endpoint .params table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+        .endpoint .params th, .endpoint .params td { padding: 6px 12px; text-align: left; border-bottom: 1px solid #e5e7eb; font-size: 13px; }
+        .endpoint .params th { background: #f8fafc; font-weight: 600; }
         .endpoint .example { background: #1f2937; color: #e5e7eb; padding: 12px 16px; border-radius: 6px; font-family: monospace; font-size: 13px; margin-top: 8px; overflow-x: auto; }
         .endpoint .example .comment { color: #6b7280; }
         .endpoint .example .string { color: #34d399; }
         .endpoint .example .key { color: #60a5fa; }
         .endpoint .example .bool { color: #f472b6; }
         .endpoint .example .url { color: #fbbf24; }
+        .endpoint .example .number { color: #f472b6; }
         
         .badge-status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
         .badge-status.success { background: #d1fae5; color: #065f46; }
         .badge-status.error { background: #fee2e2; color: #991b1b; }
         .badge-status.warning { background: #fef3c7; color: #92400e; }
+        .badge-status.info { background: #dbeafe; color: #1e40af; }
         
         table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
         th { text-align: left; padding: 8px 12px; background: #f8fafc; border-bottom: 2px solid #e5e7eb; font-weight: 600; }
         td { padding: 8px 12px; border-bottom: 1px solid #e5e7eb; }
         td code { background: #f3f4f6; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
         
+        .route-grid { display: grid; grid-template-columns: 1fr; gap: 4px; }
+        .route-item { display: flex; align-items: center; padding: 4px 8px; border-radius: 4px; background: #f8fafc; }
+        .route-item code { flex: 1; }
+        .route-item .method { font-size: 10px; margin-right: 8px; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+        
         footer { text-align: center; padding: 16px 0; color: #9ca3af; font-size: 13px; margin-top: 24px; border-top: 1px solid #e5e7eb; }
+        
+        .api-url-display {
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+        }
+        .api-url-display code { flex: 1; }
         
         @media (max-width: 600px) {
             .container { padding: 12px; }
@@ -97,7 +141,6 @@
             </div>
             <div class="nav-links">
                 <a href="/" class="nav-link">🏠 Home</a>
-                <a href="/docs/logout" class="nav-link">🚪 Logout</a>
                 <span class="badge <%= api.mainSwitch.is_enabled ? '' : 'off' %>">
                     <span class="dot"></span>
                     <%= api.mainSwitch.is_enabled ? 'Active' : 'Inactive' %>
@@ -112,14 +155,44 @@
             
             <!-- Base URL -->
             <div class="section">
-                <h2>🌐 Base URL</h2>
+                <h2>🌐 Base URLs</h2>
                 <div class="endpoint">
+                    <p style="font-weight: 600; margin-bottom: 4px;">Primary Domain:</p>
                     <code style="font-size: 16px; color: #2563eb;">
                         https://pw-books-apis-by-aryan.onrender.com
                     </code>
+                    <p style="font-weight: 600; margin: 8px 0 4px;">API Base:</p>
+                    <code style="font-size: 16px; color: #2563eb;">
+                        https://api.penpencil.co/
+                    </code>
                     <p style="color: #6b7280; margin-top: 4px; font-size: 14px;">
-                        All API endpoints are relative to this base URL.
+                        All API endpoints are relative to the primary domain.
                     </p>
+                </div>
+            </div>
+
+            <!-- Quick Commands -->
+            <div class="section">
+                <h2>🚀 Quick Start Commands</h2>
+                <div class="endpoint">
+                    <h4 style="margin-bottom: 8px;">cURL Commands</h4>
+                    <div class="example">
+                        <span class="comment"># Check if API is healthy</span>
+                        <br>
+                        curl https://pw-books-apis-by-aryan.onrender.com/api/health
+                        <br><br>
+                        <span class="comment"># Get all books (paginated)</span>
+                        <br>
+                        curl "https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books?page=1&limit=50"
+                        <br><br>
+                        <span class="comment"># Search books by subject</span>
+                        <br>
+                        curl "https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books/search?q=physics&limit=20"
+                        <br><br>
+                        <span class="comment"># Get books by class & exam</span>
+                        <br>
+                        curl "https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books?classes=12&exams=NEET&page=1&limit=50"
+                    </div>
                 </div>
             </div>
 
@@ -151,6 +224,10 @@
                     <span class="method get">GET</span>
                     <span class="path">/api/health</span>
                     <div class="desc">Check if the server is running</div>
+                    <div class="api-url-display">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/health</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/health')">Copy</button>
+                    </div>
                     <div class="example">
                         <span class="comment">// Response</span>
                         {
@@ -165,6 +242,10 @@
                     <span class="method get">GET</span>
                     <span class="path">/api/status</span>
                     <div class="desc">Get full server status including token and API state</div>
+                    <div class="api-url-display">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/status</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/status')">Copy</button>
+                    </div>
                     <div class="example">
                         <span class="comment">// Response</span>
                         {
@@ -178,23 +259,48 @@
                                 <span class="key">"set"</span>: <span class="bool">true</span>,
                                 <span class="key">"name"</span>: <span class="string">"token"</span>
                             },
-                            <span class="key">"records"</span>: <span class="string">1</span>
+                            <span class="key">"records"</span>: <span class="number">1</span>
                         }
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/token</span>
+                    <div class="desc">Check token status</div>
+                    <div class="api-url-display">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/token</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/token')">Copy</button>
                     </div>
                 </div>
             </div>
 
-            <!-- PW Books APIs -->
+            <!-- Book Endpoints -->
             <div class="section">
-                <h2>📚 PW Books API Endpoints</h2>
+                <h2>📖 Book Endpoints</h2>
                 
                 <div class="endpoint">
                     <span class="method get">GET</span>
                     <span class="path">/api/book/:bookId</span>
                     <div class="desc">Get details for a specific book</div>
+                    <div class="api-url-display">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/book/6776351fa7479393acd73a2f</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/book/6776351fa7479393acd73a2f')">Copy</button>
+                    </div>
                     <div class="example">
-                        <span class="comment">// Example</span>
-                        <span class="url">https://.../api/book/6776351fa7479393acd73a2f</span>
+                        <span class="comment">// Example Response</span>
+                        {
+                            <span class="key">"success"</span>: <span class="bool">true</span>,
+                            <span class="key">"data"</span>: {
+                                <span class="key">"_id"</span>: <span class="string">"6776351fa7479393acd73a2f"</span>,
+                                <span class="key">"title"</span>: <span class="string">"Physics Part 1"</span>,
+                                <span class="key">"author"</span>: <span class="string">"NCERT"</span>,
+                                <span class="key">"edition"</span>: <span class="string">"2024-25"</span>,
+                                <span class="key">"currentPrice"</span>: <span class="number">299</span>,
+                                <span class="key">"listPrice"</span>: <span class="number">399</span>,
+                                <span class="key">"isPaid"</span>: <span class="bool">true</span>
+                            }
+                        }
                     </div>
                 </div>
 
@@ -202,48 +308,165 @@
                     <span class="method get">GET</span>
                     <span class="path">/api/book/:bookId/chapters</span>
                     <div class="desc">Get all chapters for a book</div>
-                    <div class="example">
-                        <span class="comment">// Example</span>
-                        <span class="url">https://.../api/book/6776351fa7479393acd73a2f/chapters</span>
-                    </div>
-                </div>
-
-                <div class="endpoint">
-                    <span class="method get">GET</span>
-                    <span class="path">/api/purchased-books</span>
-                    <div class="desc">Get purchased books for a user</div>
-                    <div class="example">
-                        <span class="comment">// Example</span>
-                        <span class="url">https://.../api/purchased-books?userId=642bb24e540fd40018bf3b72&amp;paymentStatus=SUCCESS</span>
-                    </div>
-                    <table>
-                        <tr><th>Parameter</th><th>Required</th><th>Description</th></tr>
-                        <tr><td><code>userId</code></td><td>✅ Yes</td><td>Your PW Books user ID</td></tr>
-                        <tr><td><code>paymentStatus</code></td><td>❌ No</td><td>SUCCESS, PENDING, FAILURE (default: SUCCESS)</td></tr>
-                        <tr><td><code>page</code></td><td>❌ No</td><td>Page number (default: 1)</td></tr>
-                        <tr><td><code>limit</code></td><td>❌ No</td><td>Items per page (default: 100)</td></tr>
-                    </table>
-                </div>
-
-                <div class="endpoint">
-                    <span class="method all">ALL</span>
-                    <span class="path">/api/pwbooks/*</span>
-                    <div class="desc">Proxy any PW Books API request</div>
-                    <div class="example">
-                        <span class="comment">// Forward any request to the PW Books API</span>
-                        <span class="url">https://.../api/pwbooks/engagement/ai-ncert/v1/books/...</span>
+                    <div class="api-url-display">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/book/6776351fa7479393acd73a2f/chapters</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/book/6776351fa7479393acd73a2f/chapters')">Copy</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Token Management -->
+            <!-- Purchased Books -->
             <div class="section">
-                <h2>🔑 Token Management</h2>
+                <h2>🛒 Purchased Books</h2>
                 
                 <div class="endpoint">
                     <span class="method get">GET</span>
-                    <span class="path">/api/token</span>
-                    <div class="desc">Check token status</div>
+                    <span class="path">/api/purchased-books</span>
+                    <div class="desc">Get purchased books for a user</div>
+                    <div class="api-url-display">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/purchased-books?userId=642bb24e540fd40018bf3b72&paymentStatus=SUCCESS&page=1&limit=100</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/purchased-books?userId=642bb24e540fd40018bf3b72&paymentStatus=SUCCESS&page=1&limit=100')">Copy</button>
+                    </div>
+                    <div class="params">
+                        <table>
+                            <tr><th>Parameter</th><th>Required</th><th>Description</th></tr>
+                            <tr><td><code>userId</code></td><td>✅ Yes</td><td>Your PW Books user ID</td></tr>
+                            <tr><td><code>paymentStatus</code></td><td>❌ No</td><td>SUCCESS, PENDING, FAILURE (default: SUCCESS)</td></tr>
+                            <tr><td><code>page</code></td><td>❌ No</td><td>Page number (default: 1)</td></tr>
+                            <tr><td><code>limit</code></td><td>❌ No</td><td>Items per page (default: 100)</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proxy Endpoint -->
+            <div class="section">
+                <h2>🔄 Proxy Endpoint (All PW Books APIs)</h2>
+                
+                <div class="endpoint">
+                    <span class="method all">ALL</span>
+                    <span class="path">/api/pwbooks/*</span>
+                    <div class="desc">Proxy any PW Books API request. Use this to access all PW Books API endpoints.</div>
+                    
+                    <h4 style="margin: 12px 0 8px;">Available Proxy Paths:</h4>
+                    
+                    <div style="margin-bottom: 8px; font-weight: 600;">📖 Books</div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books/6776351fa7479393acd73a2f</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books/6776351fa7479393acd73a2f')">Copy</button>
+                    </div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books/search?q=physics</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books/search?q=physics')">Copy</button>
+                    </div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books?classes=12&exams=NEET&page=1&limit=50</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books?classes=12&exams=NEET&page=1&limit=50')">Copy</button>
+                    </div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books/combo?classes=11&exams=JEE</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books/combo?classes=11&exams=JEE')">Copy</button>
+                    </div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books/combo/COMBO_ID</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books/combo/COMBO_ID')">Copy</button>
+                    </div>
+
+                    <div style="margin: 12px 0 8px; font-weight: 600;">👤 User Book Mapping</div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/user-book-mapping?page=1&limit=20</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/user-book-mapping?page=1&limit=20')">Copy</button>
+                    </div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/user-book-mapping/check-shelf?bookId=BOOK_ID</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/user-book-mapping/check-shelf?bookId=BOOK_ID')">Copy</button>
+                    </div>
+
+                    <div style="margin: 12px 0 8px; font-weight: 600;">📚 User Onboarding</div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/user-onboarding/config</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/user-onboarding/config')">Copy</button>
+                    </div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/user-onboarding</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/user-onboarding')">Copy</button>
+                    </div>
+
+                    <div style="margin: 12px 0 8px; font-weight: 600;">📝 Chapters</div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/chapters/CHAPTER_ID/all-chapters</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/chapters/CHAPTER_ID/all-chapters')">Copy</button>
+                    </div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/chapters/CHAPTER_ID/sections</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/chapters/CHAPTER_ID/sections')">Copy</button>
+                    </div>
+
+                    <div style="margin: 12px 0 8px; font-weight: 600;">🤖 Feedback & AI</div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/feedback</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/feedback')">Copy</button>
+                    </div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/text-explaination?bookId=BOOK_ID&chapterId=CHAPTER_ID&text=TEXT</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/text-explaination?bookId=BOOK_ID&chapterId=CHAPTER_ID&text=TEXT')">Copy</button>
+                    </div>
+
+                    <div style="margin: 12px 0 8px; font-weight: 600;">📋 Subjects</div>
+                    <div class="api-url-display" style="margin-bottom: 4px;">
+                        <code>https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/subjects</code>
+                        <button class="copy-btn" onclick="copyToClipboard('https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/subjects')">Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Routes Structure -->
+            <div class="section">
+                <h2>🎯 Route Structure</h2>
+                
+                <div class="endpoint">
+                    <h4 style="margin-bottom: 8px;">Main Routes</h4>
+                    <div class="route-grid">
+                        <div class="route-item"><span class="method get">GET</span> <code>/</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Home/Bookshelf</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/bookshelf</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">My Books</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/books</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">All Books</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/books/:bookId</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Book Details</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/explore</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Explore Books</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/books-pass</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Books Pass</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/my-purchases</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">My Purchases</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/my-purchases/:orderId</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Order Details</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/profile</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">User Profile</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/support</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Support</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/contact-us</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Contact Us</span></div>
+                    </div>
+
+                    <h4 style="margin: 12px 0 8px;">Chapter Sub-routes</h4>
+                    <div class="route-grid">
+                        <div class="route-item"><span class="method get">GET</span> <code>/books/:bookId/chapters/:chapterId</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Chapter Details</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/books/:bookId/chapters/:chapterId/practice</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Practice Questions</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/books/:bookId/chapters/:chapterId/practice/bookmarks</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Bookmarked Questions</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/books/:bookId/chapters/:chapterId/solutions</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">NCERT Solutions</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/books/:bookId/chapters/:chapterId/highlights</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Highlights & Notes</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/books/:bookId/chapters/:chapterId/study-material</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Study Material</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/books/:bookId/chapters/:chapterId/video-explanations</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Video Explanations</span></div>
+                    </div>
+
+                    <h4 style="margin: 12px 0 8px;">Authentication Routes</h4>
+                    <div class="route-grid">
+                        <div class="route-item"><span class="method get">GET</span> <code>/login</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Login</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/logout</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Logout</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/authenticate</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Authentication</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/onboarding</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Onboarding</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/onboarding-confirm</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Confirm Onboarding</span></div>
+                    </div>
+
+                    <h4 style="margin: 12px 0 8px;">Other Routes</h4>
+                    <div class="route-grid">
+                        <div class="route-item"><span class="method get">GET</span> <code>/after-payment</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">After Payment</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/privacy-policy</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">Privacy Policy</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/ncert-license</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">NCERT License</span></div>
+                        <div class="route-item"><span class="method get">GET</span> <code>/pw-books/pdf</code> <span style="color: #6b7280; margin-left: 8px; font-size: 13px;">PDF Viewer</span></div>
+                    </div>
                 </div>
             </div>
 
@@ -261,41 +484,93 @@
                 </table>
             </div>
 
-            <!-- Quick Examples -->
+            <!-- Examples -->
             <div class="section">
-                <h2>🚀 Quick Examples</h2>
+                <h2>🚀 Complete Examples</h2>
                 
                 <div class="endpoint">
-                    <h4 style="margin-bottom: 8px;">cURL Examples</h4>
+                    <h4 style="margin-bottom: 8px;">Fetch All Books</h4>
                     <div class="example">
-                        <span class="comment"># Health Check</span>
-                        <br>
-                        curl <span class="url">https://.../api/health</span>
-                        <br><br>
-                        <span class="comment"># Get Book Details</span>
-                        <br>
-                        curl <span class="url">https://.../api/book/6776351fa7479393acd73a2f</span>
-                        <br><br>
-                        <span class="comment"># Get Purchased Books</span>
-                        <br>
-                        curl <span class="url">https://.../api/purchased-books?userId=YOUR_ID</span>
-                    </div>
-                </div>
-
-                <div class="endpoint">
-                    <h4 style="margin-bottom: 8px;">JavaScript Example</h4>
-                    <div class="example">
-                        <span class="comment">// Fetch book details</span>
+                        <span class="comment">// JavaScript</span>
                         <br>
                         const response = await fetch(
                         <br>
-                        &nbsp;&nbsp;<span class="string">'https://.../api/book/6776351fa7479393acd73a2f'</span>
+                        &nbsp;&nbsp;<span class="string">'https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books?page=1&limit=50'</span>
                         <br>
                         );
                         <br>
                         const data = await response.json();
                         <br>
                         console.log(data);
+                        <br><br>
+                        <span class="comment">// cURL</span>
+                        <br>
+                        curl "https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books?page=1&limit=50"
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <h4 style="margin-bottom: 8px;">Get Book Details</h4>
+                    <div class="example">
+                        <span class="comment">// JavaScript</span>
+                        <br>
+                        const response = await fetch(
+                        <br>
+                        &nbsp;&nbsp;<span class="string">'https://pw-books-apis-by-aryan.onrender.com/api/book/6776351fa7479393acd73a2f'</span>
+                        <br>
+                        );
+                        <br>
+                        const data = await response.json();
+                        <br>
+                        console.log(data);
+                        <br><br>
+                        <span class="comment">// cURL</span>
+                        <br>
+                        curl https://pw-books-apis-by-aryan.onrender.com/api/book/6776351fa7479393acd73a2f
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <h4 style="margin-bottom: 8px;">Search Books</h4>
+                    <div class="example">
+                        <span class="comment">// JavaScript</span>
+                        <br>
+                        const response = await fetch(
+                        <br>
+                        &nbsp;&nbsp;<span class="string">'https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books/search?q=physics&limit=20'</span>
+                        <br>
+                        );
+                        <br>
+                        const data = await response.json();
+                        <br>
+                        console.log(data);
+                        <br><br>
+                        <span class="comment">// cURL</span>
+                        <br>
+                        curl "https://pw-books-apis-by-aryan.onrender.com/api/pwbooks/engagement/ai-ncert/v1/books/search?q=physics&limit=20"
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <h4 style="margin-bottom: 8px;">Get Purchased Books</h4>
+                    <div class="example">
+                        <span class="comment">// JavaScript</span>
+                        <br>
+                        const userId = <span class="string">'YOUR_USER_ID'</span>;
+                        <br>
+                        const response = await fetch(
+                        <br>
+                        &nbsp;&nbsp;<span class="string">`https://pw-books-apis-by-aryan.onrender.com/api/purchased-books?userId=${userId}&paymentStatus=SUCCESS`</span>
+                        <br>
+                        );
+                        <br>
+                        const data = await response.json();
+                        <br>
+                        console.log(data);
+                        <br><br>
+                        <span class="comment">// cURL</span>
+                        <br>
+                        curl "https://pw-books-apis-by-aryan.onrender.com/api/purchased-books?userId=YOUR_USER_ID&paymentStatus=SUCCESS"
                     </div>
                 </div>
             </div>
@@ -307,7 +582,7 @@
                         API <%= api.mainSwitch.is_enabled ? 'Active' : 'Inactive' %>
                     </span>
                     <span class="badge-status <%= tokenSet ? 'success' : 'error' %>">
-                        <%= tokenSet ? 'Token Set' : 'No Token' %>
+                        <%= tokenSet ? '✅ Token Set' : '❌ No Token' %>
                     </span>
                 </span>
                 <span style="color: #9ca3af; font-size: 13px;">
@@ -322,10 +597,48 @@
     </div>
 
     <script>
-        // Update timestamp
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Find the button and show feedback
+                const buttons = document.querySelectorAll('.copy-btn');
+                buttons.forEach(btn => {
+                    if (btn.textContent === 'Copy') {
+                        btn.textContent = '✅ Copied!';
+                        btn.classList.add('copied');
+                        setTimeout(() => {
+                            btn.textContent = 'Copy';
+                            btn.classList.remove('copied');
+                        }, 2000);
+                    }
+                });
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            });
+        }
+
+        // Update timestamp every 30 seconds
         setInterval(() => {
             document.getElementById('timestamp').textContent = new Date().toLocaleString();
         }, 30000);
+
+        // Auto copy on click for API URLs
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.api-url-display code').forEach(code => {
+                code.style.cursor = 'pointer';
+                code.addEventListener('click', () => {
+                    const url = code.textContent.trim();
+                    copyToClipboard(url);
+                });
+            });
+        });
     </script>
 </body>
 </html>
