@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f4f8;
+            color: #1a202c;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container { text-align: center; padding: 40px 20px; max-width: 500px; }
+        .logo { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 32px; }
+        .logo img { height: 48px; }
+        .logo h1 { font-size: 20px; font-weight: 700; color: #1f2937; }
+        .logo .highlight { background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card { background: #ffffff; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; }
+        .card .icon { font-size: 48px; margin-bottom: 16px; }
+        .card h2 { font-size: 22px; margin-bottom: 8px; }
+        .card p { color: #6b7280; font-size: 16px; margin-bottom: 20px; line-height: 1.6; }
+        .btn { display: inline-block; padding: 10px 24px; background: #2563eb; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background 0.2s; }
+        .btn:hover { background: #1d4ed8; }
+        .btn-outline { background: transparent; color: #2563eb; border: 2px solid #2563eb; margin-left: 10px; }
+        .btn-outline:hover { background: #eff6ff; }
+        .footer { margin-top: 24px; color: #9ca3af; font-size: 13px; }
+        @media (max-width: 480px) { .btn { display: block; margin: 8px 0; } .btn-outline { margin-left: 0; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://images.seeklogo.com/logo-png/47/1/physics-wallah-logo-png_seeklogo-474856.png" alt="PW Logo">
+            <h1>
+                PW Books APIs
+                <span class="highlight">by Aryan</span>
+            </h1>
+        </div>
+
+        <div class="card">
+            <div class="icon">⛔</div>
+            <h2>API is Currently Inactive</h2>
+            <p>
+                The PW Books API is currently turned off. Please enable the main switch 
+                to access the documentation and API endpoints.
+            </p>
+            <div>
+                <a href="/" class="btn">🏠 Go Home</a>
+                <a href="/api/status" class="btn btn-outline">📊 Check Status</a>
+            </div>
+        </div>
+
+        <div class="footer">&copy; 2026 PW Books APIs by Aryan</div>
+    </div>
+</body>
+</html>

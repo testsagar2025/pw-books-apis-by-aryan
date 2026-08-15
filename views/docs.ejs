@@ -11,51 +11,321 @@
             background: #f0f4f8;
             color: #1a202c;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
-        .container { text-align: center; padding: 40px 20px; max-width: 500px; }
-        .logo { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 32px; }
-        .logo img { height: 48px; }
-        .logo h1 { font-size: 20px; font-weight: 700; color: #1f2937; }
+        .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+        
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo img { height: 36px; }
+        .logo h1 { font-size: 18px; font-weight: 700; color: #1f2937; }
         .logo .highlight { background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .card { background: #ffffff; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; }
-        .card .icon { font-size: 48px; margin-bottom: 16px; }
-        .card h2 { font-size: 22px; margin-bottom: 8px; }
-        .card p { color: #6b7280; font-size: 16px; margin-bottom: 20px; line-height: 1.6; }
-        .btn { display: inline-block; padding: 10px 24px; background: #2563eb; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background 0.2s; }
-        .btn:hover { background: #1d4ed8; }
-        .btn-outline { background: transparent; color: #2563eb; border: 2px solid #2563eb; margin-left: 10px; }
-        .btn-outline:hover { background: #eff6ff; }
-        .footer { margin-top: 24px; color: #9ca3af; font-size: 13px; }
-        @media (max-width: 480px) { .btn { display: block; margin: 8px 0; } .btn-outline { margin-left: 0; } }
+        .nav-links { display: flex; gap: 12px; align-items: center; }
+        .nav-link { color: #2563eb; text-decoration: none; font-weight: 500; padding: 6px 12px; border-radius: 6px; transition: background 0.2s; }
+        .nav-link:hover { background: #eff6ff; }
+        .badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; background: #d1fae5; color: #065f46; display: inline-flex; align-items: center; gap: 4px; }
+        .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block; }
+        .badge.off { background: #fee2e2; color: #991b1b; }
+        .badge.off .dot { background: #ef4444; }
+        
+        /* Docs Content */
+        .docs-content { background: #ffffff; border-radius: 12px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e5e7eb; }
+        .docs-content h1 { font-size: 28px; margin-bottom: 8px; }
+        .docs-content .subtitle { color: #6b7280; margin-bottom: 24px; font-size: 16px; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; color: #1f2937; margin-bottom: 12px; border-bottom: 2px solid #f3f4f6; padding-bottom: 8px; }
+        .section h2 .icon { margin-right: 8px; }
+        .endpoint { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+        .endpoint .method { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; font-family: monospace; margin-right: 8px; }
+        .method.get { background: #d1fae5; color: #065f46; }
+        .method.post { background: #dbeafe; color: #1e40af; }
+        .method.put { background: #fef3c7; color: #92400e; }
+        .method.delete { background: #fee2e2; color: #991b1b; }
+        .method.all { background: #ede9fe; color: #5b21b6; }
+        .endpoint .path { font-family: monospace; font-size: 14px; color: #1f2937; }
+        .endpoint .desc { color: #6b7280; font-size: 14px; margin-top: 4px; }
+        .endpoint .example { background: #1f2937; color: #e5e7eb; padding: 12px 16px; border-radius: 6px; font-family: monospace; font-size: 13px; margin-top: 8px; overflow-x: auto; }
+        .endpoint .example .comment { color: #6b7280; }
+        .endpoint .example .string { color: #34d399; }
+        .endpoint .example .key { color: #60a5fa; }
+        .endpoint .example .bool { color: #f472b6; }
+        .endpoint .example .url { color: #fbbf24; }
+        
+        .badge-status { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .badge-status.success { background: #d1fae5; color: #065f46; }
+        .badge-status.error { background: #fee2e2; color: #991b1b; }
+        .badge-status.warning { background: #fef3c7; color: #92400e; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+        th { text-align: left; padding: 8px 12px; background: #f8fafc; border-bottom: 2px solid #e5e7eb; font-weight: 600; }
+        td { padding: 8px 12px; border-bottom: 1px solid #e5e7eb; }
+        td code { background: #f3f4f6; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        
+        footer { text-align: center; padding: 16px 0; color: #9ca3af; font-size: 13px; margin-top: 24px; border-top: 1px solid #e5e7eb; }
+        
+        @media (max-width: 600px) {
+            .container { padding: 12px; }
+            .docs-content { padding: 16px; }
+            .endpoint { padding: 12px; }
+            .logo h1 { font-size: 15px; }
+            .logo img { height: 28px; }
+            header { padding: 12px 16px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">
-            <img src="https://images.seeklogo.com/logo-png/47/1/physics-wallah-logo-png_seeklogo-474856.png" alt="PW Logo">
-            <h1>
-                PW Books APIs
-                <span class="highlight">by Aryan</span>
-            </h1>
-        </div>
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <img src="https://images.seeklogo.com/logo-png/47/1/physics-wallah-logo-png_seeklogo-474856.png" alt="PW Logo">
+                <h1>
+                    PW Books APIs
+                    <span class="highlight">by Aryan</span>
+                </h1>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">🏠 Home</a>
+                <a href="/docs/logout" class="nav-link">🚪 Logout</a>
+                <span class="badge <%= api.mainSwitch.is_enabled ? '' : 'off' %>">
+                    <span class="dot"></span>
+                    <%= api.mainSwitch.is_enabled ? 'Active' : 'Inactive' %>
+                </span>
+            </div>
+        </header>
 
-        <div class="card">
-            <div class="icon">⛔</div>
-            <h2>API is Currently Inactive</h2>
-            <p>
-                The PW Books API is currently turned off. Please enable the main switch 
-                to access the documentation and API endpoints.
-            </p>
-            <div>
-                <a href="/" class="btn">🏠 Go Home</a>
-                <a href="/api/status" class="btn btn-outline">📊 Check Status</a>
+        <!-- Docs -->
+        <div class="docs-content">
+            <h1>📖 API Documentation</h1>
+            <p class="subtitle">Complete reference for PW Books APIs by Aryan</p>
+            
+            <!-- Base URL -->
+            <div class="section">
+                <h2>🌐 Base URL</h2>
+                <div class="endpoint">
+                    <code style="font-size: 16px; color: #2563eb;">
+                        https://pw-books-apis-by-aryan.onrender.com
+                    </code>
+                    <p style="color: #6b7280; margin-top: 4px; font-size: 14px;">
+                        All API endpoints are relative to this base URL.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Authentication -->
+            <div class="section">
+                <h2>🔑 Authentication</h2>
+                <div class="endpoint">
+                    <p style="margin-bottom: 8px;">All API requests require a valid Bearer token set in the server.</p>
+                    <div class="example">
+                        <span class="comment">// Token is automatically loaded from Base44</span>
+                        <br>
+                        <span class="key">Authorization</span>: <span class="string">Bearer</span> <span class="string">&lt;your-token&gt;</span>
+                        <br>
+                        <span class="key">client-type</span>: <span class="string">AI_NCERT</span>
+                    </div>
+                    <div style="margin-top: 8px;">
+                        <span class="badge-status <%= tokenSet ? 'success' : 'error' %>">
+                            <%= tokenSet ? '✅ Token Set' : '❌ No Token' %>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Endpoints -->
+            <div class="section">
+                <h2>📊 Status & Health</h2>
+                
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/health</span>
+                    <div class="desc">Check if the server is running</div>
+                    <div class="example">
+                        <span class="comment">// Response</span>
+                        {
+                            <span class="key">"status"</span>: <span class="string">"OK"</span>,
+                            <span class="key">"server"</span>: <span class="string">"PW Books APIs by Aryan"</span>,
+                            <span class="key">"timestamp"</span>: <span class="string">"2026-08-15T..."</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/status</span>
+                    <div class="desc">Get full server status including token and API state</div>
+                    <div class="example">
+                        <span class="comment">// Response</span>
+                        {
+                            <span class="key">"server"</span>: <span class="string">"PW Books APIs by Aryan"</span>,
+                            <span class="key">"status"</span>: <span class="string">"operational"</span>,
+                            <span class="key">"api"</span>: {
+                                <span class="key">"enabled"</span>: <span class="bool">true</span>,
+                                <span class="key">"status"</span>: <span class="string">"ON"</span>
+                            },
+                            <span class="key">"token"</span>: {
+                                <span class="key">"set"</span>: <span class="bool">true</span>,
+                                <span class="key">"name"</span>: <span class="string">"token"</span>
+                            },
+                            <span class="key">"records"</span>: <span class="string">1</span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- PW Books APIs -->
+            <div class="section">
+                <h2>📚 PW Books API Endpoints</h2>
+                
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/book/:bookId</span>
+                    <div class="desc">Get details for a specific book</div>
+                    <div class="example">
+                        <span class="comment">// Example</span>
+                        <span class="url">https://.../api/book/6776351fa7479393acd73a2f</span>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/book/:bookId/chapters</span>
+                    <div class="desc">Get all chapters for a book</div>
+                    <div class="example">
+                        <span class="comment">// Example</span>
+                        <span class="url">https://.../api/book/6776351fa7479393acd73a2f/chapters</span>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/purchased-books</span>
+                    <div class="desc">Get purchased books for a user</div>
+                    <div class="example">
+                        <span class="comment">// Example</span>
+                        <span class="url">https://.../api/purchased-books?userId=642bb24e540fd40018bf3b72&amp;paymentStatus=SUCCESS</span>
+                    </div>
+                    <table>
+                        <tr><th>Parameter</th><th>Required</th><th>Description</th></tr>
+                        <tr><td><code>userId</code></td><td>✅ Yes</td><td>Your PW Books user ID</td></tr>
+                        <tr><td><code>paymentStatus</code></td><td>❌ No</td><td>SUCCESS, PENDING, FAILURE (default: SUCCESS)</td></tr>
+                        <tr><td><code>page</code></td><td>❌ No</td><td>Page number (default: 1)</td></tr>
+                        <tr><td><code>limit</code></td><td>❌ No</td><td>Items per page (default: 100)</td></tr>
+                    </table>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method all">ALL</span>
+                    <span class="path">/api/pwbooks/*</span>
+                    <div class="desc">Proxy any PW Books API request</div>
+                    <div class="example">
+                        <span class="comment">// Forward any request to the PW Books API</span>
+                        <span class="url">https://.../api/pwbooks/engagement/ai-ncert/v1/books/...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token Management -->
+            <div class="section">
+                <h2>🔑 Token Management</h2>
+                
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="path">/api/token</span>
+                    <div class="desc">Check token status</div>
+                </div>
+            </div>
+
+            <!-- Error Codes -->
+            <div class="section">
+                <h2>⚠️ Error Codes</h2>
+                <table>
+                    <tr><th>Code</th><th>Meaning</th><th>Solution</th></tr>
+                    <tr><td><code>400</code></td><td>Bad Request</td><td>Check your parameters</td></tr>
+                    <tr><td><code>401</code></td><td>Unauthorized</td><td>Check your token</td></tr>
+                    <tr><td><code>404</code></td><td>Not Found</td><td>Check the URL</td></tr>
+                    <tr><td><code>429</code></td><td>Too Many Requests</td><td>Slow down, wait a moment</td></tr>
+                    <tr><td><code>500</code></td><td>Server Error</td><td>Try again later</td></tr>
+                    <tr><td><code>503</code></td><td>API Inactive</td><td>Enable the main switch</td></tr>
+                </table>
+            </div>
+
+            <!-- Quick Examples -->
+            <div class="section">
+                <h2>🚀 Quick Examples</h2>
+                
+                <div class="endpoint">
+                    <h4 style="margin-bottom: 8px;">cURL Examples</h4>
+                    <div class="example">
+                        <span class="comment"># Health Check</span>
+                        <br>
+                        curl <span class="url">https://.../api/health</span>
+                        <br><br>
+                        <span class="comment"># Get Book Details</span>
+                        <br>
+                        curl <span class="url">https://.../api/book/6776351fa7479393acd73a2f</span>
+                        <br><br>
+                        <span class="comment"># Get Purchased Books</span>
+                        <br>
+                        curl <span class="url">https://.../api/purchased-books?userId=YOUR_ID</span>
+                    </div>
+                </div>
+
+                <div class="endpoint">
+                    <h4 style="margin-bottom: 8px;">JavaScript Example</h4>
+                    <div class="example">
+                        <span class="comment">// Fetch book details</span>
+                        <br>
+                        const response = await fetch(
+                        <br>
+                        &nbsp;&nbsp;<span class="string">'https://.../api/book/6776351fa7479393acd73a2f'</span>
+                        <br>
+                        );
+                        <br>
+                        const data = await response.json();
+                        <br>
+                        console.log(data);
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status -->
+            <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <span>
+                    <span class="badge-status <%= api.mainSwitch.is_enabled ? 'success' : 'error' %>">
+                        API <%= api.mainSwitch.is_enabled ? 'Active' : 'Inactive' %>
+                    </span>
+                    <span class="badge-status <%= tokenSet ? 'success' : 'error' %>">
+                        <%= tokenSet ? 'Token Set' : 'No Token' %>
+                    </span>
+                </span>
+                <span style="color: #9ca3af; font-size: 13px;">
+                    v1.0.0 • <span id="timestamp"><%= new Date().toLocaleString() %></span>
+                </span>
             </div>
         </div>
 
-        <div class="footer">&copy; 2026 PW Books APIs by Aryan</div>
+        <footer>
+            PW Books APIs by Aryan &copy; 2026
+        </footer>
     </div>
+
+    <script>
+        // Update timestamp
+        setInterval(() => {
+            document.getElementById('timestamp').textContent = new Date().toLocaleString();
+        }, 30000);
+    </script>
 </body>
 </html>
