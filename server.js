@@ -4,7 +4,6 @@ const helmet = require('helmet');
 const dotenv = require('dotenv');
 const path = require('path');
 const axios = require('axios');
-const session = require('express-session'); // ← ADD THIS
 
 dotenv.config();
 
@@ -20,44 +19,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // ← ADD THIS for form data
+app.use(express.urlencoded({ extended: true }));
 
-// ============================================
-// SESSION MIDDLEWARE (REQUIRED for docs auth)
-// ============================================
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-secret-key-change-this',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { 
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
-    }
-}));
-
-// ============================================
-// DOCS AUTHORIZATION MIDDLEWARE (MUST BE BEFORE /docs route)
-// ============================================
-app.use('/docs', (req, res, next) => {
-    // Skip middleware for these paths
-    if (req.path === '/verify' || req.path === '/logout') {
-        return next();
-    }
-    
-    // Check if user is authorized for /docs
-    if (req.path === '/docs' && !req.session?.docsAuthorized) {
-        return res.render('docs-auth', {
-            title: 'Access Required - PW Books APIs by Aryan',
-            error: null,
-            timestamp: new Date().toISOString()
-        });
-    }
-    next();
-});
-
-// ============================================
-// FETCH BASE44 DATA
-// ============================================
 async function fetchBase44Data() {
     try {
         const response = await axios.get(BASE44_API_URL, { params: { sort: '-created_date', limit: 500 } });
@@ -243,10 +206,8 @@ app.get('/api/purchased-books', async (req, res) => {
 });
 
 // ============================================
-// DOCS ROUTES (Password Protected)
+// 📚 DOCS PAGE (PUBLIC - NO PASSWORD)
 // ============================================
-
-// Main docs page
 app.get('/docs', async (req, res) => {
     await fetchBase44Data();
     
@@ -266,31 +227,8 @@ app.get('/docs', async (req, res) => {
     });
 });
 
-// Docs password verification
-app.post('/docs/verify', async (req, res) => {
-    const { password } = req.body;
-    const DOCS_PASSWORD = '123@123';
-    
-    if (password === DOCS_PASSWORD) {
-        req.session.docsAuthorized = true;
-        return res.redirect('/docs');
-    }
-    
-    res.render('docs-auth', {
-        title: 'Access Denied - PW Books APIs by Aryan',
-        error: 'Invalid password. Please try again.',
-        timestamp: new Date().toISOString()
-    });
-});
-
-// Docs logout
-app.get('/docs/logout', (req, res) => {
-    req.session.docsAuthorized = false;
-    res.redirect('/docs');
-});
-
 // ============================================
-// 404 - Page Not Found (Catch-all - MUST BE LAST)
+// 404 - Page Not Found
 // ============================================
 app.use((req, res) => {
     res.status(404).render('404', {
